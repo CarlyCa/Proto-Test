@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Hornets Video Selector</title>
+  <style>
+    :root {
+      --bg: #0b0b0e;
+      --ring: #7c3aed;
+    }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; margin: 0; }
+    body {
+      background: var(--bg);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: system-ui, sans-serif;
+    }
+    .app {
+      height: min(94vh, 980px);
+      aspect-ratio: 9 / 16;
+      display: grid;
+      grid-template-columns: 1fr 70px; /* slim sidebar */
+      border-radius: 18px;
+      overflow: hidden;
+      border: 1px solid #202029;
+    }
+    .stage {
+      position: relative;
+      background: black;
+    }
+    .stage video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .sidebar {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 4px; /* closer together */
+      padding: 4px;
+    }
+    .thumb {
+      border: none;
+      padding: 0;
+      margin: 0;
+      aspect-ratio: 1 / 1;
+      border-radius: 8px;
+      overflow: hidden;
+      cursor: pointer;
+      outline: none;
+      width: 100%;
+    }
+    .thumb[aria-current="true"] {
+      box-shadow: 0 0 0 2px var(--ring) inset;
+    }
+    .thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="stage">
+      <video id="stageVideo" autoplay muted loop playsinline src="https://samplelib.com/lib/preview/mp4/sample-5s.mp4"></video>
+    </div>
+    <div class="sidebar">
+      <!-- Grant Williams -->
+      <button class="thumb" aria-current="true" data-video="https://samplelib.com/lib/preview/mp4/sample-5s.mp4">
+        <img src="https://cdn.nba.com/headshots/nba/latest/1040x760/1629684.png" alt="Grant Williams">
+      </button>
+      <!-- LaMelo Ball -->
+      <button class="thumb" data-video="https://samplelib.com/lib/preview/mp4/sample-10s.mp4">
+        <img src="https://cdn.nba.com/headshots/nba/latest/1040x760/1630163.png" alt="LaMelo Ball">
+      </button>
+      <!-- Brandon Miller -->
+      <button class="thumb" data-video="https://samplelib.com/lib/preview/mp4/sample-15s.mp4">
+        <img src="https://cdn.nba.com/headshots/nba/latest/1040x760/1641706.png" alt="Brandon Miller">
+      </button>
+      <!-- Tre Mann -->
+      <button class="thumb" data-video="https://samplelib.com/lib/preview/mp4/sample-20s.mp4">
+        <img src="https://cdn.nba.com/headshots/nba/latest/1040x760/1630544.png" alt="Tre Mann">
+      </button>
+    </div>
+  </div>
+
+  <script>
+    const videoEl = document.getElementById('stageVideo');
+    const buttons = document.querySelectorAll('.thumb');
+
+    buttons.forEach(btn => btn.addEventListener('click', () => {
+      const src = btn.getAttribute('data-video');
+      if (!src) return;
+
+      buttons.forEach(b => b.removeAttribute('aria-current'));
+      btn.setAttribute('aria-current', 'true');
+
+      videoEl.src = src;
+      videoEl.load();
+      videoEl.play().catch(() => {});
+    }));
+  </script>
+</body>
+</html>
